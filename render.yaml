@@ -4,7 +4,7 @@ services:
   # =====================================================
   - type: web
     name: fyp-backend
-    runtime: python
+    env: python
     plan: free
     rootDir: Backend
     buildCommand: pip install -r requirements.txt
@@ -29,12 +29,13 @@ services:
   # =====================================================
   # FRONTEND SERVICE (Vite/React Static SPA)
   # =====================================================
-  - type: static
+  - type: web
     name: fyp-frontend
+    env: static
     plan: free
     rootDir: Frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    staticPublishPath: ./dist
     routes:
       - type: rewrite
         source: /*

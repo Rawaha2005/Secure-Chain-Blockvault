@@ -14,6 +14,8 @@ DB_NAME = os.getenv("DB_NAME", "securechain")
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+elif DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # SQLAlchemy PostgreSQL Engine with connection health checking
 engine = create_engine(
@@ -37,4 +39,4 @@ def get_db():
     try:
         yield db
     finally:
-        db.close()
+        db.close()

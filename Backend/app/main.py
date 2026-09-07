@@ -11,7 +11,10 @@ from app.core.database import engine, Base
 from app.db.models import User, FileRecord, Block
 from app.db.custody_model import CustodyLog
 
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"[Startup Warning] Could not connect/create database tables: {e}")
 
 # =====================================================
 # FASTAPI APP

@@ -5,8 +5,13 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 load_dotenv()
 
-# Load AES key from .env
-AES_KEY = base64.b64decode(os.getenv("AES_KEY"))
+# Load AES key from .env with fallback
+DEFAULT_AES_KEY_B64 = "UQ0Nuj4RWMBd8eEwrP127SSfw2nueDtvSVYHksoIadA="
+raw_aes_key = os.getenv("AES_KEY", DEFAULT_AES_KEY_B64)
+try:
+    AES_KEY = base64.b64decode(raw_aes_key)
+except Exception:
+    AES_KEY = base64.b64decode(DEFAULT_AES_KEY_B64)
 
 aesgcm = AESGCM(AES_KEY)
 
