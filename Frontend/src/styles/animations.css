@@ -1,0 +1,123 @@
+/* Fade */
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+
+transform:translateY(25px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+.fade-in{
+
+animation:fadeIn .8s ease;
+
+}
+
+/* Floating */
+
+@keyframes floating{
+
+0%{
+
+transform:translateY(0px);
+
+}
+
+50%{
+
+transform:translateY(-10px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+.float{
+
+animation:floating 4s infinite ease-in-out;
+
+}
+
+/* Glow */
+
+@keyframes glow{
+
+0%{
+
+box-shadow:0 0 8px #00E5FF;
+
+}
+
+50%{
+
+box-shadow:0 0 22px #00E5FF;
+
+}
+
+100%{
+
+box-shadow:0 0 8px #00E5FF;
+
+}
+
+}
+
+.glow{
+
+animation:glow 2s infinite;
+
+}
+
+/* Scan Line */
+
+@keyframes scan{
+
+0%{
+
+top:0;
+
+}
+
+100%{
+
+top:100%;
+
+}
+
+}
+
+.scan-line{
+
+position:absolute;
+
+left:0;
+
+right:0;
+
+height:2px;
+
+background:#00E5FF;
+
+animation:scan 5s linear infinite;
+
+opacity:.6;
+
+}
