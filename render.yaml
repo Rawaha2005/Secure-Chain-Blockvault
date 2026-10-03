@@ -22,7 +22,7 @@ services:
       - key: AES_KEY
         value: UQ0Nuj4RWMBd8eEwrP127SSfw2nueDtvSVYHksoIadA=
       - key: CORS_ORIGINS
-        value: https://fyp-frontend.onrender.com,http://localhost:5173
+        value: https://securechain-frontend-flame.vercel.app,https://fyp-frontend.onrender.com,http://localhost:5173
       - key: PYTHON_VERSION
         value: 3.11.9
 
