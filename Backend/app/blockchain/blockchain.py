@@ -39,28 +39,35 @@ class Block:
     # CALCULATE BLOCK HASH
     # =================================================
 
-    def calculate_hash(self):
-
+    def calculate_hash(self, compact: bool = True):
         block_data = {
             "index": self.index,
             "timestamp": self.timestamp,
             "data": self.data,
             "previous_hash": self.previous_hash,
         }
+        if compact:
+            block_string = json.dumps(
+                block_data,
+                sort_keys=True,
+                separators=(",", ":"),
+                default=str,
+            ).encode("utf-8")
+        else:
+            block_string = json.dumps(
+                block_data,
+                sort_keys=True,
+                default=str,
+            ).encode("utf-8")
+        return hashlib.sha256(block_string).hexdigest()
 
-        block_string = json.dumps(
-            block_data,
-            sort_keys=True,
-            separators=(",", ":"),
-            default=str,
-        ).encode("utf-8")
-
-        return hashlib.sha256(
-            block_string
-        ).hexdigest()
-
-
-# =====================================================
+    def matches_hash(self, expected_hash: str) -> bool:
+        if not expected_hash:
+            return False
+        return expected_hash in (
+            self.calculate_hash(compact=True),
+            self.calculate_hash(compact=False),
+        )
 # BLOCKCHAIN
 # =====================================================
 
@@ -125,63 +132,30 @@ class Blockchain:
     # =================================================
 
     def is_chain_valid(self):
-
         if not self.chain:
-
             return False
 
-        # ---------------------------------------------
-        # Validate genesis block
-        # ---------------------------------------------
+        start_idx = 1
+        if self.chain[0].index == 0:
+            if self.chain[0].previous_hash != "0":
+                return False
+            if not self.chain[0].matches_hash(self.chain[0].hash):
+                return False
+        elif self.chain[0].index == 1:
+            if not self.chain[0].matches_hash(self.chain[0].hash):
+                return False
 
-        genesis = self.chain[0]
-
-        if genesis.index != 0:
-
-            return False
-
-        if genesis.previous_hash != "0":
-
-            return False
-
-        # ---------------------------------------------
-        # Validate every block
-        # ---------------------------------------------
-
-        for i in range(1, len(self.chain)):
-
+        for i in range(start_idx, len(self.chain)):
             current_block = self.chain[i]
-
             previous_block = self.chain[i - 1]
 
-            # -----------------------------------------
-            # Validate block index
-            # -----------------------------------------
-
             if current_block.index != previous_block.index + 1:
-
                 return False
 
-            # -----------------------------------------
-            # Validate current block hash
-            # -----------------------------------------
-
-            if (
-                current_block.hash
-                != current_block.calculate_hash()
-            ):
-
+            if not current_block.matches_hash(current_block.hash):
                 return False
 
-            # -----------------------------------------
-            # Validate previous hash linkage
-            # -----------------------------------------
-
-            if (
-                current_block.previous_hash
-                != previous_block.hash
-            ):
-
+            if current_block.previous_hash != previous_block.hash:
                 return False
 
         return True
